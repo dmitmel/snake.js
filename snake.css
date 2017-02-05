@@ -1,0 +1,49 @@
+.counter,
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+#game-title {
+    font-size: 600%;
+}
+
+#score {
+    font-size: 250%;
+}
+
+#high-score {
+    font-size: 190%;
+}
+
+#time {
+    font-size: 130%;
+}
+
+#copyright {
+    position: absolute;
+    margin-bottom: 0;
+}
+
+hr {
+    margin: 5px 0;
+    border-top: 1px solid #DDD;
+}
+
+.modal {
+    text-align: center;
+    padding: 0 !important;
+}
+
+.modal:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px;
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}

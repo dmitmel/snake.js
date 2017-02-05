@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<!--
+  ~ Copyright (c) 2017 Dmytro Meleshko
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/png" href="./favicon.png"/>
+
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+            crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+        <link rel="stylesheet" href="./snake.css">
+
+        <title>Snake!</title>
+    </head>
+
+    <body onkeydown="changeDirectionEvent(event)">
+        <div class="modal fade" id="you-died-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                        <h4 class="modal-title">You died!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Unfortunately, you ate your tail. Don't worry, it's just a game!
+                        </p>
+                        <label for="player-name">Enter here your name to save your score:</label>
+                        <input type="text" class="form-control" id="player-name" placeholder="Your name">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Play again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-6">
+                    <h1 class="text-center" id="game-title">Snake!</h1>
+                </div>
+                <div class="col-xs-3">
+                    <div id="score" class="row counter">
+                        <span class="col-xs-8 text-left">Score:</span>
+                        <span id="score-counter" class="col-xs-4 text-right">0</span>
+                    </div>
+                    <hr>
+                    <div id="high-score" class="row counter">
+                        <span class="col-xs-8 text-left">High Score:</span>
+                        <span id="high-score-counter" class="col-xs-4 text-right">0</span>
+                    </div>
+                    <hr>
+                    <div id="time" class="row counter">
+                        <span class="col-xs-7 text-left">Time:</span>
+                        <span id="time-counter" class="col-xs-5 text-right">0 sec</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <h2>Leaderboard</h2>
+                    <table id="leaderboard" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Score</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <canvas id="canvas" class="center-block" style="display: block"></canvas>
+                </div>
+                <div class="col-xs-3">
+                    <h2>Goal</h2>
+                    <p>
+                        You play control the snake (it's square) and you must eat fruits (they're circles). Each fruit adds additional square to
+                        your snake's tail. If you touch any segment of your snake with its head - game ends. If you enter a wall - you exit from
+                        opposite wall.
+                    </p>
+
+                    <h2>Controls</h2>
+                    <p>
+                        <kbd>W</kbd>
+                        <kbd>A</kbd>
+                        <kbd>S</kbd>
+                        <kbd>D</kbd>
+                        or
+                        <kbd>&uparrow;</kbd>
+                        <kbd>&rightarrow;</kbd>
+                        <kbd>&downarrow;</kbd>
+                        <kbd>&leftarrow;</kbd>
+                    </p>
+
+                    <div id="copyright">
+                        <p>Copyright &copy; 2017 Dmytro Meleshko</p>
+                        <p>
+                            This game was created using
+                            <a href="http://getbootstrap.com/">Bootstrap</a>,
+                            <a href="http://jquery.com/">JQuery</a>
+                            and
+                            <a href="https://fonts.google.com/specimen/Montserrat">Montserrat Font</a>.
+                        </p>
+                        <p>
+                            Licensed under
+                            <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>. Code is available on
+                            <a href="https://github.com/dmitmel/shake.js">GitHub</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script
+            src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+            crossorigin="anonymous"></script>
+        <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+        <script src="./snake.js"></script>
+    </body>
+</html>
