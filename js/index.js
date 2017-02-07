@@ -14,27 +14,38 @@
  * limitations under the License.
  */
 
+/* global _ */
+
 'use strict';
 
 var canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d'),
-    scoreCounter = document.getElementById('score-counter'),
-    highScoreCounter = document.getElementById('high-score-counter'),
-    timeCounter = document.getElementById('time-counter'),
-    leaderboardBody = $('#leaderboard > tbody'),
+    scoreCounter = $('#score-counter'),
+    highScoreCounter = $('#high-score-counter'),
+    timeCounter = $('#time-counter'),
+    leaderboard = $('#leaderboard > tbody'),
     youDiedModal = $('#you-died-modal'),
     youDiedModalPlayerName = $('#you-died-modal #player-name'),
+    youDiedModalScore = $('#you-died-modal #statistics-score'),
+    youDiedModalTime = $('#you-died-modal #statistics-time'),
     gameLoopInterval, timeUpdateInterval;
 
-canvas.height = canvas.width = $(document).width() / 2.4;
+var CANVAS_TO_PARENT_SIZE_PROPORTION = 1.1;
+canvas.height = canvas.width = $(canvas).parent().width() / CANVAS_TO_PARENT_SIZE_PROPORTION;
 
 var FIELD_WIDTH = 30, // Field width in cells
     FIELD_HEIGHT = 30, // Field height in cells
-    CELL_WIDTH = canvas.width / FIELD_WIDTH,
-    CELL_HEIGHT = canvas.height / FIELD_HEIGHT,
+    CELL_SIZE = canvas.width / FIELD_WIDTH,
     GAME_LOOP_INTERVAL_MS = 100,
     SNAKE_BLINKING_INTERVAL_MS = 150, // Snake blinks after death
     SNAKE_BLINKING_TIME_MS = 2000; // How many snake will be blinking
+
+// Adding responsivity for canvas
+$(window).on('resize', _.debounce(function() {
+    // Size values are recalculated on each resize
+    canvas.height = canvas.width = $(canvas).parent().width() / CANVAS_TO_PARENT_SIZE_PROPORTION;
+    CELL_SIZE = canvas.width / FIELD_WIDTH;
+}, GAME_LOOP_INTERVAL_MS));
 
 var KEY_CODES = {
     leftArrow: 37,
@@ -54,8 +65,9 @@ youDiedModal.on('shown.bs.modal', function() {
 });
 youDiedModal.on('hidden.bs.modal', function() {
     var name = youDiedModalPlayerName.val();
-    if (name !== null && name != undefined && name.length > 0)
-        leaderboardBody.prepend('<tr>' +
+    if (!_.isEmpty(name))
+        leaderboard.prepend(
+            '<tr>' +
             '<td>' + name + '</td>' +
             '<td>' + score + '</td>' +
             '<td>' + time + ' sec</td>' +
@@ -69,16 +81,32 @@ youDiedModalPlayerName.keyup(function(evt) {
         youDiedModal.modal('hide');
 });
 
-context.drawCircle = function drawCircle(x, y, radius) {
+context.fillCircle = function fillCircle(x, y, radius) {
     this.beginPath();
-    var centerX = x * CELL_WIDTH + radius;
-    var centerY = y * CELL_HEIGHT + radius;
+    var centerX = x * CELL_SIZE + radius;
+    var centerY = y * CELL_SIZE + radius;
     this.arc(centerX, centerY, radius, 0, 2 * Math.PI);
     this.fill();
 };
 
-var snake, fruit, score, highScore = 0,
-    time;
+// canTurn is used as fix for this bug: if player presses two keys in one game loop interval, snake can turn around
+var snake, fruit, score, time, canTurn, highScore = 0;
+
+$(document.body).on('keydown', function(evt) {
+    if (canTurn) {
+        canTurn = false;
+        var keyCode = evt.keyCode;
+        var head = _.head(snake);
+        if ((keyCode == KEY_CODES.leftArrow || keyCode == KEY_CODES.a) && head.direction != 'right')
+            head.direction = 'left';
+        else if ((keyCode == KEY_CODES.upArrow || keyCode == KEY_CODES.w) && head.direction != 'down')
+            head.direction = 'up';
+        else if ((keyCode == KEY_CODES.rightArrow || keyCode == KEY_CODES.d) && head.direction != 'left')
+            head.direction = 'right';
+        else if ((keyCode == KEY_CODES.downArrow || keyCode == KEY_CODES.s) && head.direction != 'up')
+            head.direction = 'down';
+    }
+});
 
 function setup() {
     snake = [
@@ -101,13 +129,14 @@ function setup() {
     drawScore();
 
     time = 0;
+    canTurn = true;
 }
 
 function drawScore() {
-    scoreCounter.innerHTML = score;
+    scoreCounter.html(score);
     if (score > highScore)
         highScore = score;
-    highScoreCounter.innerHTML = highScore;
+    highScoreCounter.html(highScore);
 }
 
 function draw() {
@@ -116,17 +145,17 @@ function draw() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.strokeRect(0, 0, canvas.width, canvas.height);
 
-    context.drawCircle(fruit.x, fruit.y, CELL_WIDTH / 2 - 1);
+    context.fillCircle(fruit.x, fruit.y, CELL_SIZE / 2 - 1);
 
     // Saving data from previous last cell, to spawn there new cell, if snake eats fruit
-    var prevLastX = snake[snake.length - 1].x,
-        prevLastY = snake[snake.length - 1].y,
-        prevLastDirection = snake[snake.length - 1].direction;
+    var prevLastX = _.last(snake).x,
+        prevLastY = _.last(snake).y,
+        prevLastDirection = _.last(snake).direction;
 
-    var head = snake[0];
+    var head = _.head(snake);
 
-    var i, cell;
     // Checking if head touches any cell from tail
+    var cell, i;
     for (i = 1; i < snake.length; i++) {
         cell = snake[i];
         if (head.x == cell.x && head.y == cell.y) {
@@ -138,10 +167,11 @@ function draw() {
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 context.strokeRect(0, 0, canvas.width, canvas.height);
 
-                for (i = 0; i < snake.length; i++) {
-                    cell = snake[i];
-                    if (blinkingIsVisible)
-                        context.fillRect(cell.x * CELL_WIDTH, cell.y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT);
+                if (blinkingIsVisible) {
+                    for (i = 0; i < snake.length; i++) {
+                        cell = snake[i];
+                        context.fillRect(cell.x * CELL_SIZE, cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    }
                 }
 
                 blinkingIsVisible = !blinkingIsVisible;
@@ -149,6 +179,8 @@ function draw() {
 
             setTimeout(function() {
                 clearInterval(blinkingInterval);
+                youDiedModalScore.html(score);
+                youDiedModalTime.html(time + ' sec');
                 youDiedModal.modal('show');
             }, SNAKE_BLINKING_TIME_MS);
 
@@ -158,7 +190,7 @@ function draw() {
 
     for (i = 0; i < snake.length; i++) {
         cell = snake[i];
-        context.fillRect(cell.x * CELL_WIDTH, cell.y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT);
+        context.fillRect(cell.x * CELL_SIZE, cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 
         if (cell.direction == 'left') cell.x--;
         else if (cell.direction == 'up') cell.y--;
@@ -188,6 +220,8 @@ function draw() {
         var nextCell = snake[i - 1];
         cell.direction = nextCell.direction;
     }
+
+    canTurn = true;
 }
 
 function normalizeCoord(coord, maxValue) {
@@ -196,23 +230,10 @@ function normalizeCoord(coord, maxValue) {
     return coord;
 }
 
-function changeDirectionEvent(evt) { // eslint-disable-line no-unused-vars
-    var keyCode = evt.keyCode;
-    var headDirection = snake[0].direction;
-    if ((keyCode == KEY_CODES.leftArrow || keyCode == KEY_CODES.a) && headDirection != 'right')
-        snake[0].direction = 'left';
-    else if ((keyCode == KEY_CODES.upArrow || keyCode == KEY_CODES.w) && headDirection != 'down')
-        snake[0].direction = 'up';
-    else if ((keyCode == KEY_CODES.rightArrow || keyCode == KEY_CODES.d) && headDirection != 'left')
-        snake[0].direction = 'right';
-    else if ((keyCode == KEY_CODES.downArrow || keyCode == KEY_CODES.s) && headDirection != 'up')
-        snake[0].direction = 'down';
-}
-
 function runGame() {
     setup();
     timeUpdateInterval = setInterval(function() {
-        timeCounter.innerHTML = time + ' sec';
+        timeCounter.html(time + ' sec');
         time++;
     }, 1000);
     gameLoopInterval = setInterval(draw, GAME_LOOP_INTERVAL_MS);

@@ -25,12 +25,13 @@
 
         <link rel="stylesheet" href="./css/bootstrap.min.css">
         <link rel="stylesheet" href="./fonts/Montserrat.css">
+        <link rel="stylesheet" href="./fonts/FredokaOne.css">
         <link rel="stylesheet" href="./css/index.css">
 
         <title>Snake!</title>
     </head>
 
-    <body onkeydown="changeDirectionEvent(event)">
+    <body>
         <div class="modal fade" id="you-died-modal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -44,6 +45,23 @@
                         <p>
                             Unfortunately, you ate your tail. Don't worry, it's just a game!
                         </p>
+
+                        <table class="table table-striped">
+                            <thead>
+                                <caption>Your statistics</caption>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Score</td>
+                                    <td id="statistics-score">0</td>
+                                </tr>
+                                <tr>
+                                    <td>Time</td>
+                                    <td id="statistics-time">0 sec</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                         <label for="player-name">Enter here your name to save your score:</label>
                         <input type="text" class="form-control" id="player-name" placeholder="Your name">
                     </div>
@@ -54,7 +72,7 @@
             </div>
         </div>
 
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 <div class="col-xs-3"></div>
                 <div class="col-xs-6">
@@ -92,13 +110,13 @@
                     </table>
                 </div>
                 <div class="col-xs-6">
-                    <canvas id="canvas" class="center-block" style="display: block"></canvas>
+                    <canvas id="canvas" class="center-block"></canvas>
                 </div>
-                <div class="col-xs-3">
+                <div id="info-column" class="col-xs-3">
                     <h2>Goal</h2>
                     <p>
-                        You play control the snake (it's square) and you must eat fruits (they're circles). Each fruit adds additional square to
-                        your snake's tail. If you touch any segment of your snake with its head - game ends. If you enter a wall - you exit from
+                        You control the snake (it's square) and you must eat fruits (they're circles). Each fruit adds additional square to your
+                        snake's tail. If you touch any segment of your snake with its head - game ends. If you enter a wall - you exit from
                         opposite wall.
                     </p>
 
@@ -114,26 +132,32 @@
                         <kbd>&downarrow;</kbd>
                         <kbd>&leftarrow;</kbd>
                     </p>
-
-                    <div id="copyright">
-                        <p>Copyright &copy; 2017 Dmytro Meleshko</p>
-                        <p>
-                            This game was created using
-                            <a href="http://getbootstrap.com/">Bootstrap</a>,
-                            <a href="http://jquery.com/">JQuery</a>
-                            and
-                            <a href="https://fonts.google.com/specimen/Montserrat">Montserrat Font</a>.
-                        </p>
-                        <p>
-                            Licensed under
-                            <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>. Code is available on
-                            <a href="https://github.com/dmitmel/snake.js">GitHub</a>.
-                        </p>
-                    </div>
                 </div>
+                <!-- /.row -->
             </div>
+            <!-- /.container -->
         </div>
 
+        <footer class="footer" role="contentinfo">
+            <div class="container">
+                <p>
+                    Copyright &copy; 2017
+                    <a href="https://github.com/dmitmel">Dmytro Meleshko</a>
+                </p>
+                This game was created using
+                <a href="http://getbootstrap.com/">Bootstrap</a>,
+                <a href="http://underscorejs.com/">Underscore.js</a>
+                and
+                <a href="http://jquery.com/">JQuery</a>. Used fonts:
+                <a href="https://fonts.google.com/specimen/Fredoka+One">Fredoka One</a>
+                and
+                <a href="https://fonts.google.com/specimen/Montserrat">Montserrat</a>. Licensed under
+                <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>. Code is available on
+                <a href="https://github.com/dmitmel/snake.js">GitHub</a>.
+            </div>
+        </footer>
+
+        <script src="./js/underscore.min.js"></script>
         <script src="./js/jquery.min.js"></script>
         <script src="./js/bootstrap.min.js"></script>
         <script src="./js/index.js"></script>

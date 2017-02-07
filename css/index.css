@@ -1,5 +1,9 @@
 .counter,
 h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fredoka One', cursive;
+}
+
+body {
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -19,14 +23,13 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 130%;
 }
 
-#copyright {
-    position: absolute;
-    margin-bottom: 0;
-}
-
 hr {
     margin: 5px 0;
     border-top: 1px solid #DDD;
+}
+
+#copyright {
+    margin-top: 20px;
 }
 
 .modal {
