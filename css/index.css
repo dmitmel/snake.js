@@ -32,6 +32,10 @@ hr {
     margin-top: 20px;
 }
 
+#footer {
+    margin-top: 15px;
+}
+
 .modal {
     text-align: center;
     padding: 0 !important;
