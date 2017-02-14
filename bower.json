@@ -1,0 +1,20 @@
+{
+  "name": "snake.js",
+  "description": "Good old game, rewritten in JavaScript",
+  "main": "index.html",
+  "authors": [
+    "dmitmel"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "javascript-game",
+    "snake"
+  ],
+  "homepage": "https://github.com/dmitmel/snake.js",
+  "private": true,
+  "dependencies": {
+    "underscore": "^1.8.3",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1"
+  }
+}
