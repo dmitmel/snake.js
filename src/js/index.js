@@ -159,7 +159,7 @@
         timeCounter.html(secSinceStart + ' sec');
 
         // Saving data from previous last cell, to spawn there new cell, if snake eats fruit
-        var prevTail = _.clone(_.tail(snake));
+        var prevTail = _.clone(_.last(snake));
 
         if (isHeadTouchingCell()) {
             killSnake();
