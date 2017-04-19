@@ -154,7 +154,9 @@
 
         context.fillCircle(fruit.x, fruit.y, CELL_SIZE / 2 - 1);
 
-        timeCounter.html((_.now() - startTime) + ' sec');
+        var msSinceStart = _.now() - startTime;
+        var secSinceStart = Math.floor(msSinceStart / 1000);
+        timeCounter.html(secSinceStart + ' sec');
 
         // Saving data from previous last cell, to spawn there new cell, if snake eats fruit
         var prevTail = _.clone(_.tail(snake));
