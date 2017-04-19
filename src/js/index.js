@@ -128,8 +128,8 @@
 
         // First fruit will be spawned on random cell
         fruit = {
-            x: _.random(FIELD_WIDTH),
-            y: _.random(FIELD_HEIGHT)
+            x: _.random(FIELD_WIDTH - 1),
+            y: _.random(FIELD_HEIGHT - 1)
         };
 
         score = 0;
@@ -235,8 +235,8 @@
             snake.push(tailCell);
 
             fruit = {
-                x: _.random(FIELD_WIDTH),
-                y: _.random(FIELD_HEIGHT)
+                x: _.random(FIELD_WIDTH - 1),
+                y: _.random(FIELD_HEIGHT - 1)
             };
 
             score++;
