@@ -30,21 +30,21 @@ gulp.task('css:build', function() {
         .pipe(sourcemaps.init())
         .pipe(autoprefixer())
         .pipe(cleanCSS())
-        .pipe(sourcemaps.write('.', { includeContent: true, sourceRoot: '../src/css' }))
-        .pipe(gulp.dest('./dist/css'));
+        .pipe(sourcemaps.write('.', { includeContent: true, sourceRoot: '../../src/js' }))
+        .pipe(gulp.dest(paths.dist.css));
 });
 
 gulp.task('fonts:build', function() {
     return gulp.src(paths.src.fonts + '/**/*.{css,eot,svg,woff,woff2}')
-        .pipe(gulp.dest('./dist/fonts'));
+        .pipe(gulp.dest(paths.dist.fonts));
 });
 
 gulp.task('js:build', function() {
-    return gulp.src('./src/js/**/*.js')
+    return gulp.src(paths.src.js + '/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(uglify({ preserveComments: 'license' }))
-        .pipe(sourcemaps.write('.', { includeContent: true, sourceRoot: '../src/css' }))
-        .pipe(gulp.dest('./dist/js'));
+        .pipe(sourcemaps.write('.', { includeContent: true, sourceRoot: '../../src/js' }))
+        .pipe(gulp.dest(paths.dist.js));
 });
 
 gulp.task('build', ['js:build', 'css:build', 'fonts:build']);
